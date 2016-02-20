@@ -1,0 +1,261 @@
+				<!DOCTYPE html>
+				<html>
+				  <head>
+				    <title>Twitter React App</title>
+				    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+				    <link rel="stylesheet" href="custom.css">
+				    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+				    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+				    <script src="https://fb.me/react-0.13.3.js"></script>
+				    <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
+				  </head>
+				  <body>
+				    <section id="user">
+				        
+				    </section>
+
+				    <script type="text/jsx">
+				        var User = React.createClass({
+				        	getInitialState: function() {
+								return {
+									username1: 'cristiangartner',
+									username1Array: [],
+									username1Followers: [],
+									username1Following: [],
+
+									username2: 'knomatic',
+									username2Array: [],
+									username2Followers: [],
+									username2Following: []
+								};
+							},
+
+					        componentDidMount: function() {
+					        	this.getData1();
+					        	this.getData2();
+					        },
+
+					        getData1: function(event) {
+							    const user1Url = 'http://cristiangartner.com/twitter/tweets_json.php?screen_name=' + this.state.username1;
+							    const user1FollowersUrl = 'http://cristiangartner.com/twitter/followers_json.php?count=50&screen_name=' + this.state.username1 + '&cursor=-1&skip_status=true&include_user_entities=false';
+							    const user1FollowingUrl = 'http://cristiangartner.com/twitter/following_json.php?count=50&screen_name=' + this.state.username1 + '&cursor=-1&skip_status=true&include_user_entities=false';
+
+					        	this.serverRequest = $.get(user1Url, function (result) {
+									this.setState({
+								        username1Array: JSON.parse(result)
+								    });
+							    }.bind(this));
+
+							    this.serverRequest = $.get(user1FollowersUrl, function (result) {
+							    	const resultJson = JSON.parse(result);
+							    	const resultArray = resultJson.users;
+
+									this.setState({
+								        username1Followers: resultArray
+								    });
+							    }.bind(this));
+
+							    this.serverRequest = $.get(user1FollowingUrl, function (result) {
+							    	const resultJson = JSON.parse(result);
+							    	const resultArray = resultJson.users;
+
+									this.setState({
+								        username1Following: resultArray
+								    });
+							    }.bind(this));
+							},
+
+							setUser1: function() {
+								
+								this.getData1();
+							},
+
+							onChange1: function() {
+							    this.setState({username1: event.target.value});
+
+							},
+
+							getData2: function(event) {
+							    const user2Url = 'http://cristiangartner.com/twitter/tweets_json.php?screen_name=' + this.state.username2;
+							    const user2FollowersUrl = 'http://cristiangartner.com/twitter/followers_json.php?count=50&screen_name=' + this.state.username2 + '&cursor=-1&skip_status=true&include_user_entities=false';
+							    const user2FollowingUrl = 'http://cristiangartner.com/twitter/following_json.php?count=50&screen_name=' + this.state.username2 + '&cursor=-1&skip_status=true&include_user_entities=false';
+
+					        	this.serverRequest = $.get(user2Url, function (result) {
+									this.setState({
+								        username2Array: JSON.parse(result)
+								    });
+							    }.bind(this));
+
+							    this.serverRequest = $.get(user2FollowersUrl, function (result) {
+							    	const resultJson = JSON.parse(result);
+							    	const resultArray = resultJson.users;
+
+									this.setState({
+								        username2Followers: resultArray
+								    });
+							    }.bind(this));
+
+							    this.serverRequest = $.get(user2FollowingUrl, function (result) {
+							    	const resultJson = JSON.parse(result);
+							    	const resultArray = resultJson.users;
+
+									this.setState({
+								        username2Following: resultArray
+								    });
+							    }.bind(this));
+							},
+
+							setUser2: function() {
+								this.getData2();
+							},
+
+							onChange2: function() {
+							    this.setState({username2: event.target.value});
+
+							},
+
+					        render: function() {
+
+								const followers1 = this.state.username1Followers.map(function(user) {
+									keyVal = 'username1Followers-' + user.id;
+									return (
+										<div key={keyVal}>
+											<div className="media">
+									            <a className="pull-left" href="#">
+									                <img className="media-object dp img-circle" src={user.profile_image_url}/>
+									            </a>
+									            <div className="media-body">
+									                <h4 className="media-heading">{user.name}</h4>
+									                <h5>@{user.screen_name}</h5>
+									                <span className="label label-info">Lang: {user.lang}</span>
+									            </div>
+									        </div>
+										</div>
+									);
+								});
+
+								const following1 = this.state.username1Following.map(function(user) {
+									keyVal = 'username1Following-' + user.id;
+									return (
+										<div key={keyVal}>
+											<div className="media">
+									            <a className="pull-left" href="#">
+									                <img className="media-object dp img-circle" src={user.profile_image_url}/>
+									            </a>
+									            <div className="media-body">
+									                <h4 className="media-heading">{user.name}</h4>
+									                <h5>@{user.screen_name}</h5>
+									                <span className="label label-info">Lang: {user.lang}</span>
+									            </div>
+									        </div>
+										</div>
+									);
+								});
+
+								const followers2 = this.state.username2Followers.map(function(user) {
+									keyVal = 'username2Followers-' + user.id;
+									return (
+										<div key={keyVal}>
+											<div className="media">
+									            <a className="pull-left" href="#">
+									                <img className="media-object dp img-circle" src={user.profile_image_url}/>
+									            </a>
+									            <div className="media-body">
+									                <h4 className="media-heading">{user.name}</h4>
+									                <h5>@{user.screen_name}</h5>
+									                <span className="label label-info">Lang: {user.lang}</span>
+									            </div>
+									        </div>
+										</div>
+									);
+								});
+
+								const following2 = this.state.username2Following.map(function(user) {
+									keyVal = 'username2Following-' + user.id;
+									return (
+										<div key={keyVal}>
+											<div className="media">
+									            <a className="pull-left" href="#">
+									                <img className="media-object dp img-circle" src={user.profile_image_url}/>
+									            </a>
+									            <div className="media-body">
+									                <h4 className="media-heading">{user.name}</h4>
+									                <h5>@{user.screen_name}</h5>
+									                <span className="label label-info">Lang: {user.lang}</span>
+									            </div>
+									        </div>
+										</div>
+									);
+								});
+								
+				        		return (
+				        			<div>
+				        				<div className="col-xs-12 col-sm-6">
+				        					<div className="section-name">
+						        				<input
+											        type="text"
+											        value={this.state.username1}
+											        onChange={this.onChange1}
+											        className="form-control"
+											    />
+											    <span className="btn-go" onClick={this.setUser1}>GO</span>
+											    <div className="username">
+											    	<img className="my-avatar" src={this.state.username1Array.profile_image_url} alt={this.state.username1Array.screen_name}/>
+											    	@{this.state.username1Array.screen_name}
+											    </div>
+											</div>
+					        				<div className="section-content col-xs-6">
+					        					<div className="section-head">
+					        						Followers
+					        					</div>
+					        					{followers1}
+					        				</div>
+					        				<div className="section-content col-xs-6">
+					        					<div className="section-name section-name-second">
+					        						
+												</div>
+					        					<div className="section-head">
+					        						Following
+					        					</div>
+					        					{following1}
+					        				</div>
+					        			</div>
+
+				        				<div className="col-xs-12 col-sm-6">
+				        					<div className="section-name">
+						        				<input
+											        type="text"
+											        value={this.state.username2}
+											        onChange={this.onChange2}
+											        className="form-control"
+											    />
+											    <span className="btn-go" onClick={this.setUser2}>GO</span>
+											    <div className="username">
+											    	<img className="my-avatar" src={this.state.username2Array.profile_image_url} alt={this.state.username1Array.screen_name}/>
+											    	@{this.state.username2Array.screen_name}
+											    </div>
+											</div>
+					        				<div className="section-content col-xs-6">
+					        					<div className="section-head">
+					        						Followers
+					        					</div>
+					        					{followers2}
+					        				</div>
+					        				<div className="section-content col-xs-6">
+					        					<div className="section-name  section-name-second">
+					        						
+												</div>
+					        					<div className="section-head">
+					        						Following
+					        					</div>
+					        					{following2}
+					        				</div>
+					        			</div>
+				            		</div>
+				            	);
+					        }
+				        })
+				        React.render( <User/>, document.getElementById('user'))
+				    </script>
+				  </body>
+				</html>
